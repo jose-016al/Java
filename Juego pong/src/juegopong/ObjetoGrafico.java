@@ -1,19 +1,19 @@
 package juegopong;
 import java.awt.*;
 // @author jose Almiron
-public abstract class ObjetoGrafico  {
- 
+public abstract class ObjetoGrafico {
+
     private int x;
     private int y;
     private int altura;
     private int anchura;
     private Color color;
 
-    public ObjetoGrafico(int x, int y, int altura, int anchura, Color color) {
+    public ObjetoGrafico(int x, int y, int anchura, int altura, Color color) {
         this.x = x;
         this.y = y;
-        this.altura = altura;
         this.anchura = anchura;
+        this.altura = altura;
         this.color = color;
     }
 
@@ -36,37 +36,35 @@ public abstract class ObjetoGrafico  {
     public Color getColor() {
         return color;
     }
-    
+
     public abstract void dibujar(Graphics g);
-         
-    public boolean colisionaCon(ObjetoGrafico o){
-         if (this.x > o.getX() + o.getAnchura()) {
-             return false;
-         } else if (this.x + this.anchura < o.getX()) {
-             return false;
-         } else if (this.y > o.getY() + o.getAltura()) {
-             return false;
-         } else if (this.y + this.altura < o.getY()) {
-             return false;
-         } else {
-             return true;
-         }
+
+    public boolean colisionaCon(ObjetoGrafico o) {
+        boolean t;
+        if (this.y + this.altura > o.y || o.y + o.altura > this.y || this.x > o.x + o.anchura || o.x > this.x + this.anchura) {
+            t = false;
+        } else {
+            t = true;
+        }
+        return t;
     }
-    
+
     protected void incrementarX(int x) {
-        if (x <= 1980) {
-            this.x += x;
-        } else if (x >= 0) {
-            this.x -= x;
+        if (this.x + this.anchura + x < 1366) {
+            this.x = this.x + x;
         }
     }
-    
+
     protected void incrementarY(int y) {
-         if (y <= 1080) {
-             this.y += y;
-         } else if (y >= 0) {
-             this.y -= y;
-         } 
+        if (this.y + this.altura + y < 768) {
+            this.y = this.y + y;
+        }
     }
-    
+
+    protected void desincrementarY(int y) {
+        if (this.y - y > 0) {
+            this.y = this.y - y;
+        }
+    }
+
 }

@@ -11,16 +11,17 @@ public class Raqueta extends ObjetoGrafico {
     }
 
     public void moverArriba() {
-        y -= velocidad;
+        this.desincrementarY(velocidad);
     }
     
     public void moverAbajo() {
-        y += velocidad;
+        this.incrementarY(velocidad);
     }
     
     @Override
     public void dibujar(Graphics g) {
-        g.fillRect(getX(), getY(), getAnchura(), getAltura());
+        g.setColor(this.getColor());
+        g.fillRect(this.getX(), this.getY(), this.getAnchura(), this.getAltura());
     }
     
 }
