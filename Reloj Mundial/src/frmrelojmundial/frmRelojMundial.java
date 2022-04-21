@@ -5,7 +5,8 @@
  */
 package frmrelojmundial;
 
-import java.time.LocalTime;
+import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 import relojmundial.PlanetaTierra;
 
@@ -36,6 +37,10 @@ public class frmRelojMundial extends javax.swing.JFrame {
         cmdMostrarHora = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Reloj mundial (c) 2022 Jose Almiron");
+        setIconImage(getIconImage());
+        setName("frame"); // NOI18N
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -101,6 +106,12 @@ public class frmRelojMundial extends javax.swing.JFrame {
         PlanetaTierra p = new PlanetaTierra();
         String hora = "La hora actual de la zona " + seleccion + " es: " + p.getHora(seleccion);
         JOptionPane.showMessageDialog(this,  hora,  "Hora",  JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    @Override
+    public Image getIconImage() {
+        Image imagen = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("iconos/icono.png"));
+        return imagen;
     }
     
     /**
