@@ -7,20 +7,22 @@ package frmrelojmundial;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
-import relojmundial.PlanetaTierra;
-
-/**
- *
- * @author jose_
- */
-public class frmRelojMundial extends javax.swing.JFrame {
-
-    /**
-     * Creates new form frmRelojMundial
-     */
+import relojmundial.*;
+// Jose Almiron
+public class frmRelojMundial extends javax.swing.JFrame implements GeneradorSegundosListener {
+    
+    private String ZonaHorariaSeleccionada;
+    private GeneradorSegundos generador;
+    
     public frmRelojMundial() {
         initComponents();
+        this.ZonaHorariaSeleccionada = "Europe/Madrid";
+        this.generador = new GeneradorSegundos(this);
     }
 
     /**
@@ -33,8 +35,9 @@ public class frmRelojMundial extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        cmdZonaHoraria = new javax.swing.JComboBox<>();
-        cmdMostrarHora = new javax.swing.JButton();
+        cmbZonaHoraria = new javax.swing.JComboBox<>();
+        lblReloj = new javax.swing.JLabel();
+        cmdCambiarZonaHoraria = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Reloj mundial (c) 2022 Jose Almiron");
@@ -42,6 +45,9 @@ public class frmRelojMundial extends javax.swing.JFrame {
         setName("frame"); // NOI18N
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -49,10 +55,13 @@ public class frmRelojMundial extends javax.swing.JFrame {
 
         jLabel1.setText("Zona horaria:");
 
-        cmdMostrarHora.setText("Mostrar hora");
-        cmdMostrarHora.addActionListener(new java.awt.event.ActionListener() {
+        lblReloj.setFont(new java.awt.Font("Dialog", 1, 40)); // NOI18N
+        lblReloj.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        cmdCambiarZonaHoraria.setText("Cambiar zona horaria");
+        cmdCambiarZonaHoraria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmdMostrarHoraActionPerformed(evt);
+                cmdCambiarZonaHorariaActionPerformed(evt);
             }
         });
 
@@ -64,10 +73,14 @@ public class frmRelojMundial extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(cmdZonaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cmbZonaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(cmdMostrarHora)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(cmdCambiarZonaHoraria)
+                .addContainerGap(26, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblReloj, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -75,9 +88,11 @@ public class frmRelojMundial extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(cmdZonaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmdMostrarHora))
-                .addContainerGap(21, Short.MAX_VALUE))
+                    .addComponent(cmbZonaHoraria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmdCambiarZonaHoraria))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
@@ -86,23 +101,29 @@ public class frmRelojMundial extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         rellenarComboBoxZonasHorarias();
+        cmbZonaHoraria.setSelectedItem(this.ZonaHorariaSeleccionada);
+        generador.start();
     }//GEN-LAST:event_formWindowOpened
 
-    private void cmdMostrarHoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdMostrarHoraActionPerformed
-        mostrarHora();
-    }//GEN-LAST:event_cmdMostrarHoraActionPerformed
+    private void cmdCambiarZonaHorariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmdCambiarZonaHorariaActionPerformed
+        this.ZonaHorariaSeleccionada = cmbZonaHoraria.getSelectedItem().toString();
+    }//GEN-LAST:event_cmdCambiarZonaHorariaActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        generador.detener();
+    }//GEN-LAST:event_formWindowClosing
 
     public void rellenarComboBoxZonasHorarias() {
         PlanetaTierra p = new PlanetaTierra();
         String [] zonas = p.getZonasHorariasDisponibles();
         int i = 0;
         for (String s : zonas) {
-            cmdZonaHoraria.addItem(zonas[i++]);
+            cmbZonaHoraria.addItem(zonas[i++]);
         }
     }
     
     public void mostrarHora() {
-        String seleccion = cmdZonaHoraria.getSelectedItem().toString();
+        String seleccion = cmbZonaHoraria.getSelectedItem().toString();
         PlanetaTierra p = new PlanetaTierra();
         String hora = "La hora actual de la zona " + seleccion + " es: " + p.getHora(seleccion);
         JOptionPane.showMessageDialog(this,  hora,  "Hora",  JOptionPane.INFORMATION_MESSAGE);
@@ -112,6 +133,17 @@ public class frmRelojMundial extends javax.swing.JFrame {
     public Image getIconImage() {
         Image imagen = Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("iconos/icono.png"));
         return imagen;
+    }
+    
+    @Override
+    public void procesarSegundo() {
+        PlanetaTierra p = new PlanetaTierra();
+        LocalTime horas = p.getHora(ZonaHorariaSeleccionada);
+        LocalDate fecha = LocalDate.now();
+        LocalDateTime time = LocalDateTime.of(fecha, horas);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String formato = time.format(formatter);
+        lblReloj.setText(formato);
     }
     
     /**
@@ -150,8 +182,9 @@ public class frmRelojMundial extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cmdMostrarHora;
-    private javax.swing.JComboBox<String> cmdZonaHoraria;
+    private javax.swing.JComboBox<String> cmbZonaHoraria;
+    private javax.swing.JButton cmdCambiarZonaHoraria;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lblReloj;
     // End of variables declaration//GEN-END:variables
 }
