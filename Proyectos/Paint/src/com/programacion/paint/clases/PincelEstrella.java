@@ -8,14 +8,12 @@ import javax.imageio.*;
 
 public class PincelEstrella implements Pincel {
  
-        public static Image ESTRELLA;
+        private static Image ESTRELLA;
         static {
-                String a = "ESTRELLA.jpeg";
-                File f = new File(a);
+                File f = new File("src/com/programacion/paint/recursos/ESTRELLA.png");
                 try {
-                        BufferedImage b = ImageIO.read(f);
-                        Image e = ImageIO.read(f);
-                        ESTRELLA = e;
+                        BufferedImage imagen = ImageIO.read(f);
+                        ESTRELLA = imagen;
                 } catch (IOException ex) {
                         Logger.getLogger(PincelEstrella.class.getName()).log(Level.SEVERE, null, ex);
                 }
