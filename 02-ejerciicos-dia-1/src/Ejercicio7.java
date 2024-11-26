@@ -11,13 +11,9 @@ public class Ejercicio7 {
         System.out.println("Ingresa 8 numeros:");
 
             // Rellenar array de numeros
-        while (contador < 8) {
-            System.out.print("Numero: ");
-            numeros[contador] = input.nextInt();
-            contador++;
-        }
-
         for (int i = 0; i < numeros.length; i++) {
+            System.out.print("Numero: ");
+            numeros[i] = input.nextInt();
             suma += numeros[i];
         }
 
