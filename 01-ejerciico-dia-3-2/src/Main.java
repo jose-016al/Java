@@ -9,9 +9,8 @@ public class Main {
         Impresora[] impresoras = {impresora1, impresora2, impresora3};
 
             // Apartado B
-        for (int i = 0; i < impresoras.length; i++) {
-            System.out.println("-----Impresora" +(i+1)+"-----");
-            System.out.println("Modelo de impresora: " + impresoras[i].getModelo() + " y el tipo de conexion es " + impresoras[i].getTipo());
+        for (Impresora impresora : impresoras) {
+            System.out.println("Modelo de impresora: " + impresora.getModelo() + " y el tipo de conexion es " + impresora.getTipo());
         }
     }
 }
