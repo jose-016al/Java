@@ -18,5 +18,16 @@ public class Reserva {
         return numeroAsientos;
     }
 
-    public 
+    public void reservar(String nombre, int numeroAsientos) throws ReservaInvalidaException {
+        if (nombre.isBlank()) {
+            throw new ReservaInvalidaException("El nombre es obligatorio");
+        }
+        if (numeroAsientos > this.numeroAsientos) {
+            throw new ReservaInvalidaException("No hay suficientes asientos dispinibles");
+        }
+        if (numeroAsientos < 0) {
+            throw new ReservaInvalidaException("Debes seleccioanr un minimo de un asiento");
+        }
+        System.out.println("Reserva realizada con exito");
+    }
 }

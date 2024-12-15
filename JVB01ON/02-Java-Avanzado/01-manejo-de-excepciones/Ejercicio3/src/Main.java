@@ -1,5 +1,14 @@
+import java.util.Date;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+
+        Reserva reserva = new Reserva("Jose", "Londres", new Date(), 5);
+
+        try {
+            reserva.reservar("Jose",2);
+        } catch (ReservaInvalidaException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
