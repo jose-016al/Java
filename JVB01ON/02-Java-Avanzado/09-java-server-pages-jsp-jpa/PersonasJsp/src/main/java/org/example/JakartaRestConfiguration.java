@@ -1,4 +1,4 @@
-package com.mycompany.webaplication;
+package org.example;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

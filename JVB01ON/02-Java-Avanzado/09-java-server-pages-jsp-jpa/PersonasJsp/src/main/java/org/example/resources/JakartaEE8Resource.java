@@ -1,4 +1,4 @@
-package com.mycompany.webaplication.resources;
+package org.example.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
