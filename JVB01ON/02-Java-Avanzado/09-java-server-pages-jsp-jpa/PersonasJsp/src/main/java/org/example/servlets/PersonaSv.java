@@ -5,6 +5,7 @@
 package org.example.servlets;
 
 import org.example.logica.Persona;
+import org.example.logica.Controladora;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import javax.servlet.http.*;
 @WebServlet("/PersonaSv") // Esta anotación define la ruta del servlet
 public class PersonaSv extends HttpServlet {
     private ArrayList<Persona> listaPersonas = new ArrayList<>();
+    private Controladora control = new Controladora();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nombre = request.getParameter("nombre");
@@ -25,10 +27,7 @@ public class PersonaSv extends HttpServlet {
         persona.setApellido(apellido);
         persona.setTelefono(telefono);
 
-        listaPersonas.add(persona);
-
-        // Aquí podrías guardar la lista en algún lugar persistente (base de datos, archivo, etc.)
-        // Por simplicidad, se guarda en memoria durante la ejecución del servlet
+        control.crearPersona(persona);
 
         response.sendRedirect("index.jsp");
     }
