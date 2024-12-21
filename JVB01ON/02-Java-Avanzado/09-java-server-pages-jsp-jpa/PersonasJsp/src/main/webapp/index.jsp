@@ -1,4 +1,4 @@
-<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="org.example.logica.Persona"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -54,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% for (Persona persona : (ArrayList<Persona>) request.getAttribute("resultados")) { %>
+                    <% for (Persona persona : (List<Persona>) request.getAttribute("resultados")) { %>
                         <tr>
                             <td><%= persona.getNombre() %></td>
                             <td><%= persona.getApellido() %></td>

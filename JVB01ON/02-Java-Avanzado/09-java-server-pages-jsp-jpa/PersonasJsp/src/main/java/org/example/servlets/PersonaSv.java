@@ -8,6 +8,7 @@ import org.example.logica.Persona;
 import org.example.logica.Controladora;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -33,15 +34,10 @@ public class PersonaSv extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            
         String consultaApellido = request.getParameter("consultaApellido");
-
-        ArrayList<Persona> personasCoincidentes = new ArrayList<>();
-
-        for (Persona persona : listaPersonas) {
-            if (persona.getApellido().equalsIgnoreCase(consultaApellido)) {
-                personasCoincidentes.add(persona);
-            }
-        }
+        
+        List<Persona> personasCoincidentes = control.filtrarPersonasPorApellido(consultaApellido);
 
         // Establecer los resultados en la solicitud para que se muestren en el JSP
         request.setAttribute("resultados", personasCoincidentes);

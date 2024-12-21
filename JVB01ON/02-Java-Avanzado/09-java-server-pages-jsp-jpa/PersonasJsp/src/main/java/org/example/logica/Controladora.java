@@ -27,4 +27,10 @@ public class Controladora {
         controlPersis.editarPersona(perso);
     }
     
+    public List<Persona> filtrarPersonasPorApellido(String apellido) {
+        return traerPersonas().stream()  
+            .filter(p -> p.getApellido().equalsIgnoreCase(apellido))
+            .toList();
+    }
+    
 }
