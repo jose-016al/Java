@@ -1,0 +1,56 @@
+#content {
+  background-color: #EEEEEE;
+}
+
+.sidebar, .buttonTop {
+  background-color: #222831;
+}
+
+.custom-switch {
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Ocultar el checkbox original */
+.custom-switch input[type="checkbox"] {
+  display: none;
+}
+
+/* Fondo del interruptor */
+.custom-switch .slider {
+  position: relative;
+  width: 42px;
+  height: 22px;
+  background-color: #ccc;
+  border-radius: 22px;
+  transition: background-color 0.3s ease;
+}
+
+/* Punto móvil del interruptor */
+.custom-switch .slider::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+/* Cambiar colores y posición cuando está activado */
+.custom-switch input[type="checkbox"]:checked+.slider {
+  background-color: #0d6efd;
+}
+
+.custom-switch input[type="checkbox"]:checked+.slider::before {
+  transform: translateX(20px);
+}
+
+/* Etiqueta del interruptor */
+.custom-switch-label {
+  margin-left: 10px;
+  font-size: 14px;
+}
