@@ -1,0 +1,9 @@
+org\aguzman\junit5app\ejemplos\models\CuentaTest$CuentaTestNombreSaldo.class
+org\aguzman\junit5app\ejemplos\models\CuentaTest$SistemaOperativoTest.class
+org\aguzman\junit5app\ejemplos\models\CuentaTest$EjemploTimeoutTest.class
+org\aguzman\junit5app\ejemplos\models\CuentaTest$VariableAmbienteTest.class
+org\aguzman\junit5app\ejemplos\models\CuentaTest$CuentaOperacionesTest.class
+org\aguzman\junit5app\ejemplos\models\CuentaTest$JavaVersionTest.class
+org\aguzman\junit5app\ejemplos\models\CuentaTest.class
+org\aguzman\junit5app\ejemplos\models\CuentaTest$SistemPropertiesTest.class
+org\aguzman\junit5app\ejemplos\models\CuentaTest$PruebasParametrizadasTest.class
