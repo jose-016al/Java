@@ -25,6 +25,7 @@
 		- [Getters](#getters)
 		- [Setters](#setters)
 		- [toString](#tostring)
+	- [Métodos y Propiedades Estáticas](#métodos-y-propiedades-estáticas)
 	- [Instanciar una clase](#instanciar-una-clase)
 		- [Instanciar mediante constructor con parámetros](#instanciar-mediante-constructor-con-parámetros)
 		- [Instanciar mediante constructor vacio](#instanciar-mediante-constructor-vacio)
@@ -67,6 +68,15 @@
 	- [Creacionales](#creacionales)
 	- [Estructurales](#estructurales)
 	- [Comportamiento](#comportamiento)
+- [Testing](#testing)
+	- [JUnit](#junit)
+		- [Anotaciones principales en JUnit](#anotaciones-principales-en-junit)
+		- [Assertions](#assertions)
+		- [Anotaciones adicionales](#anotaciones-adicionales)
+	- [Mockito](#mockito)
+		- [Anotaciones principales en Mockito](#anotaciones-principales-en-mockito)
+		- [Métodos comunes](#métodos-comunes)
+		- [Casos Avanzados](#casos-avanzados)
 # Frameworks:
 - [Spring Boot](https://github.com/jose-016al/Spring-Boot)
 # Variables
@@ -394,6 +404,43 @@ public String toString() {
     return "Persona {nombre='" + nombre + "', edad=" + edad + "}"; 
 }
 ```
+## Métodos y Propiedades Estáticas
+Podemos definir **propiedades y métodos estáticos** dentro de una clase utilizando la palabra clave `static`. Los miembros estáticos pertenecen a la **clase en sí misma**, no a una instancia de la clase, lo que significa que **no es necesario crear un objeto para usarlos**.
+### Declarar Propiedades y Métodos Estáticos
+Para declarar una **propiedad o método estático**, se utiliza `static` dentro de la clase, de la siguiente manera:
+```java
+public class Ejemplo {
+    public static String variableEstatica = "Soy estática";
+    
+    public static String metodoEstatico() {
+        return "Este es un método estático";
+    }
+}
+```
+Aquí, `variableEstatica` y `metodoEstatico()` son **estáticos** y pertenecen a la **clase**, no a una instancia.
+### Acceder a Miembros Estáticos
+Los miembros estáticos **pertenecen a la clase**, por lo que se accede a ellos utilizando el nombre de la clase seguido de `.` (punto), en lugar de crear una instancia de la clase:
+```java
+System.out.println(Ejemplo.variableEstatica); // Acceder a una propiedad estática
+System.out.println(Ejemplo.metodoEstatico());  // Llamar a un método estático
+```
+No es necesario crear un objeto con `new Ejemplo()`, ya que los miembros estáticos **existen desde el momento en que se carga la clase**.
+### Uso de Propiedades Estáticas Dentro de la Misma Clase
+Cuando una clase necesita acceder a sus propios miembros estáticos, se utiliza `this` o directamente el nombre de la clase, pero **no se utiliza `this` para acceder a propiedades estáticas**. A continuación se muestra un ejemplo de cómo hacerlo:
+```java
+public class Prueba {
+    public static String mensaje = "Hola desde static";
+
+    public static String mostrarMensaje() {
+        return mensaje; // Se puede usar directamente la propiedad estática
+    }
+}
+
+System.out.println(Prueba.mostrarMensaje()); // "Hola desde static"
+```
+Diferencia entre el uso de `this` y el acceso a miembros estáticos:
+- **`this`** se usa para acceder a **miembros de instancia** (no estáticos).
+- **`Clase.nombreDeMiembro`** (sin `this`) se usa para acceder a **propiedades y métodos estáticos** dentro de la clase.
 ## Instanciar una clase
 Existen diversas formas de instanciar una clase, dependiendo del contexto y de cómo se planea asignar o almacenar datos en el objeto creado. Recordemos que **instanciar una clase** significa crear un objeto, y para ello utilizamos los **constructores** definidos en la clase.
 
@@ -425,24 +472,17 @@ La **abstracción**  se refiere al proceso de simplificar conceptos complejos de
 Para implementar una abstracción efectiva, podemos seguir estos pasos:
 
 1. **Identificación de conceptos clave:**
-
 	- Lo primero es determinar qué elementos importantes del mundo real queremos representar en nuestro programa.
     - Por ejemplo, en una aplicación para gestionar una biblioteca, podríamos identificar conceptos como **Libro**, **Préstamo** y **Lector**.
-
-1. **Simplificación de los conceptos:**
-
+2. **Simplificación de los conceptos:**
     - A continuación, reducimos estos conceptos a sus características más relevantes, eliminando detalles secundarios.
     - Por ejemplo, para un **Libro**, podríamos enfocarnos en propiedades como **título**, **autor** y **cantidad disponible**, omitiendo detalles como el peso o color.
-
-1. **Creación de clases en Java:**
-
+3. **Creación de clases:**
     - Cada concepto identificado se representa mediante una **clase**, que incluye:
         - **Atributos:** para almacenar las características relevantes del objeto.
         - **Métodos:** para definir las acciones o comportamientos que puede realizar el objeto.
     - Por ejemplo, una clase **Libro** podría tener atributos como `titulo` y `autor`, y métodos como `prestar()` o `devolver()`.
-
-1. **Uso de las clases en el programa:**
-
+4. **Uso de las clases en el programa:**
     - Una vez creadas las clases, podemos utilizarlas para generar **objetos**, que son instancias específicas de los conceptos.
     - Por ejemplo, un objeto de la clase **Libro** podría representar un libro específico en la biblioteca.
 
@@ -480,7 +520,7 @@ public class Libro {
 ## Encapsulamiento
 **Encapsulamiento** es un pilar fundamental de la programación orientada a objetos. Este concepto consiste en **ocultar los detalles internos** de un objeto y exponer únicamente un conjunto de métodos públicos para interactuar con él. En esencia, el encapsulamiento actúa como un "escudo protector" para los datos de un objeto, garantizando que solo puedan modificarse o accederse de manera controlada y segura.
 
-💡 **Ejemplo práctico:**  
+**Ejemplo práctico:**  
 _Imagina un automóvil como un objeto. Este automóvil tiene **datos internos**, como la velocidad y la cantidad de gasolina, y **acciones** que puedes realizar, como acelerar y frenar.   Con el encapsulamiento , no puedes alterar directamente la velocidad o la cantidad de gasolina. En su lugar, debes utilizar métodos como `acelerar()` o `recargarGasolina()`, que controlan cómo se modifica el estado interno del automóvil. Esto asegura que los datos, como la velocidad, siempre permanezcan dentro de un rango válido y que el automóvil funcione correctamente._
 ### Modificadores de acceso
 Los **modificadores de acceso** son palabras clave que establecen los niveles de visibilidad de atributos y métodos en una clase, determinando qué partes del programa pueden interactuar con ellos. Los más comunes son:
@@ -524,7 +564,7 @@ public class Auto {
 }
 ```
 ## Herencia
-La **herencia** en programación permite que una clase **hija** herede características (atributos y métodos) de una clase **padre**. Esto facilita la reutilización de código y la extensión de funcionalidades. Es similar a la herencia en la vida real, donde los hijos heredan rasgos de sus padres. Por ejemplo, una clase **Animal** puede tener métodos comunes como **comer**, mientras que clases como **Perro** y **Gato** heredan esos métodos, pero también pueden agregar los suyos propios (como **ladrar** o **maullar**). En **Java**, la palabra clave **extends** se usa para indicar la herencia, y **super** se usa para acceder a los atributos de la clase padre.
+La **herencia** en programación permite que una clase **hija** herede características (atributos y métodos) de una clase **padre**. Esto facilita la reutilización de código y la extensión de funcionalidades. Es similar a la herencia en la vida real, donde los hijos heredan rasgos de sus padres. Por ejemplo, una clase **Animal** puede tener métodos comunes como **comer**, mientras que clases como **Perro** y **Gato** heredan esos métodos, pero también pueden agregar los suyos propios (como **ladrar** o **maullar**). La palabra clave **extends** se usa para indicar la herencia, y **super** se usa para acceder a los atributos de la clase padre.
 ```java
 //ejemplo clase animal en código
 public class Animal {
@@ -590,7 +630,7 @@ El polimorfismo, que proviene de "poli" (muchos) y "morfismo" (formas), permite 
 
 `@Override` es una anotación que indica explícitamente que un método en una subclase está sobrescribiendo un método definido en una superclase o interfaz. No es obligatorio utilizarla, pero su inclusión aporta beneficios importantes.
 
-💡 **Ejemplo:** Si tienes una clase `Animal` con el método `emitirSonido`, las subclases como `Perro` y `Gato` pueden sobrescribir este método para emitir sonidos diferentes, aunque todos usen el mismo nombre para el método.
+**Ejemplo:** Si tienes una clase `Animal` con el método `emitirSonido`, las subclases como `Perro` y `Gato` pueden sobrescribir este método para emitir sonidos diferentes, aunque todos usen el mismo nombre para el método.
 ```java
 public class Animal {
     public void emitirSonido() {
@@ -664,13 +704,22 @@ public class Auto extends Vehiculo {
 }
 ```
 ## Interfaces
-**Una interfaz** es un tipo especial de clase que se distingue por no poder tener atributos (en su forma tradicional) y por estar compuesta únicamente por **métodos abstractos**, es decir, métodos sin implementación. Las interfaces permiten simular un concepto que no es posible de forma nativa: **la herencia múltiple**. Esto se logra porque una clase puede implementar varias interfaces al mismo tiempo.
+**Una interfaz** es un tipo especial de clase que se diferencia de las clases tradicionales en que **no puede tener atributos** y está compuesta únicamente por **métodos abstractos**, es decir, métodos sin implementación. Las interfaces permiten simular la **herencia múltiple**, algo que no es posible de forma nativa en muchos lenguajes. Esto se logra porque una clase puede implementar varias interfaces al mismo tiempo.
 
-Mientras que las **clases abstractas** sirven como plantillas generales para sus clases hijas, las **interfaces** se enfocan en ser plantillas de comportamiento, ya que definen qué métodos deben ser implementados, pero no cómo se implementan.
+Mientras que las **clases abstractas** sirven como plantillas generales para sus clases hijas, las **interfaces** se enfocan en definir **el comportamiento**. Es decir, una interfaz especifica qué métodos deben ser implementados, pero no cómo deben ser implementados.
 ```java
 public interface Animal {
-    void hacerSonido();
-    void moverse();
+    public void hacerSonido();
+    public void moverse();
+}
+```
+Para implementar una interfaz en una clase, usamos la palabra clave `implements`, seguida del nombre de la interfaz:
+```java
+public class Perro implements Animal {
+    @Override 
+    public void hacerSonido() { System.out.println("El perro ladra"); }
+    @Override 
+    public void moverse() { System.out.println("El perro corre"); }
 }
 ```
 # Generics
@@ -1912,6 +1961,591 @@ public class ObserverPatternExample {
         weatherStation.addObserver(display2);
         // Se actualizan los datos meteorológicos, lo que notificará a los observadores
         weatherStation.setWeatherData(25.0f, 60.0f, 1012.0f);
+    }
+}
+```
+# Testing
+El testing es una parte esencial en el desarrollo de software, ya que nos permite comprobar que nuestro código funciona correctamente y se comporta como esperamos.
+
+Existen distintos tipos de pruebas, pero en esta documentación nos vamos a centrar en las **pruebas unitarias**, que son las más comunes en la mayoría de proyectos.
+
+Para ello, utilizaremos dos herramientas ampliamente adoptadas en el ecosistema Java:
+
+- **JUnit**, como framework principal de pruebas.
+- **Mockito**, para simular dependencias y aislar correctamente las unidades a testear.
+
+Las **pruebas unitarias** verifican el comportamiento de pequeñas unidades de código (como métodos o clases) de forma **aislada**, sin depender de otros componentes del sistema. El objetivo es asegurarse de que cada pieza funcione correctamente por sí sola.
+
+Cuando creamos un proyecto en Java, se generan por defecto dos directorios principales dentro de `src`:
+
+- `src/main/java`: contiene el código fuente principal de la aplicación.
+- `src/test/java`: está destinado exclusivamente a los archivos de prueba.
+
+Además, es una buena práctica seguir una nomenclatura estándar para los nombres de las clases de prueba. Por ejemplo, si queremos testear la clase `Cuenta`, la clase de prueba correspondiente debería llamarse **`CuentaTest`**.
+## JUnit
+**JUnit** es el framework más utilizado para realizar pruebas unitarias en Java. En la actualidad, la versión más moderna y recomendada es **JUnit 5**, también conocida como **JUnit Jupiter**.
+
+Para poder utilizarlo en un proyecto Maven, es necesario añadir la siguiente dependencia al archivo `pom.xml`:
+```xml
+<dependency>  
+    <groupId>org.junit.jupiter</groupId>  
+    <artifactId>junit-jupiter</artifactId>  
+    <version>5.6.3</version>  
+</dependency>
+```
+Una vez añadida la dependencia de JUnit al proyecto, ya podemos empezar a escribir nuestras pruebas.
+
+Todos los ejemplos de esta sección están basados en un proyecto sencillo que puedes consultar y descargar desde el siguiente enlace:
+
+👉 [Proyecto JUnit](https://github.com/jose-016al/Java/tree/master/Proyectos/junit5_app)
+
+El proyecto contiene dos clases principales en el paquete `models`: `Cuenta` y `Banco`.
+
+Nos centraremos en crear pruebas para la clase `Cuenta`, por lo que su clase de prueba se llamará **`CuentaTest`**, siguiendo la convención habitual.
+### Anotaciones principales en JUnit
+En JUnit 5, además de `@Test`, existen otras anotaciones muy útiles que nos permiten preparar o limpiar el entorno de pruebas, o definir un comportamiento más específico.
+#### `@Test`
+Marca un método como una prueba unitaria que debe ser ejecutada.
+```java
+@Test  
+void testSaldoCuenta() {  
+}
+```
+#### `@BeforeEach`
+Se ejecuta **antes de cada método de prueba**. Ideal para inicializar objetos comunes a varias pruebas.
+```java
+class CuentaTest {  
+    Cuenta cuenta;  
+    
+    @BeforeEach  
+    void setUp(TestInfo testInfo, TestReporter testReporter) {  
+        this.cuenta = new Cuenta("Andres", new BigDecimal("1000.12345"));  
+        System.out.println("iniciando el metodo.");  
+    }
+}
+```
+#### `@AfterEach`
+Se ejecuta **después de cada método de prueba**. Útil para limpiar recursos o cerrar conexiones si hiciera falta.
+```java
+@AfterEach  
+void tearDown() {  
+    System.out.println("finalizando el metodo de prueba.");  
+}
+```
+#### `@BeforeAll` y `@AfterAll`
+Se ejecutan **una sola vez antes o después de todas las pruebas** de la clase. Los métodos deben ser `static`.
+```java
+@BeforeAll  
+static void beforeAll() {  
+    System.out.println("inicializando el test");  
+}  
+  
+@AfterAll  
+static void afterAll() {  
+    System.out.println("finalizando el test");  
+}
+```
+#### `@DisplayName`
+Permite asignar un nombre más legible o descriptivo a una prueba, útil cuando los nombres de métodos son largos o técnicos.
+```java
+@Test  
+@DisplayName("el saldo, que no sea null, mayor que cero, valor esperado.")  
+void testSaldoCuenta() {  
+}
+```
+#### `@Disabled`
+Sirve para desactivar temporalmente una prueba (por ejemplo, si está en desarrollo o fallando).
+```java
+@Disabled("En desarrollo")
+@Test
+void testPendiente() {
+    // esta prueba no se ejecutará
+}
+```
+### Assertions
+Las **assertions** son las instrucciones que usamos dentro de los métodos de prueba para verificar que el resultado obtenido es el esperado.  Si una assertion falla, el test se marca como fallido.
+
+JUnit 5 proporciona una serie de métodos estáticos en `org.junit.jupiter.api.Assertions`.
+
+|Método|¿Qué verifica?|
+|---|---|
+|`assertEquals(a, b)`|Que `a` y `b` sean iguales|
+|`assertNotEquals(a, b)`|Que `a` y `b` **no** sean iguales|
+|`assertTrue(cond)`|Que la condición sea verdadera|
+|`assertFalse(cond)`|Que la condición sea falsa|
+|`assertNull(obj)`|Que el objeto sea `null`|
+|`assertNotNull(obj)`|Que el objeto **no** sea `null`|
+|`assertThrows(...)`|Que se lance una excepción esperada|
+|`assertAll(...)`|Agrupa varias assertions y las evalúa todas|
+|`fail()`|Falla el test manualmente (útil para placeholders)|
+
+Veamos algunos casos comunes donde aplicamos distintas assertions con JUnit.
+#### Validando el saldo de una cuenta
+```java
+@Test
+@DisplayName("El saldo debe ser distinto de null, mayor que cero y tener el valor esperado")
+void testSaldoCuenta() {
+    assertNotNull(cuenta.getSaldo());
+    assertEquals(1000.12345, cuenta.getSaldo().doubleValue());
+    assertFalse(cuenta.getSaldo().compareTo(BigDecimal.ZERO) < 0);
+    assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+}
+```
+#### Comprobando excepción por dinero insuficiente
+Cuando intentamos debitar más dinero del disponible, debería lanzarse una excepción:
+```java
+@Test
+void testDineroInsuficienteExceptionCuenta() {
+    Exception exception = assertThrows(DineroInsuficienteException.class, () -> {
+        cuenta.debito(new BigDecimal(1500));
+    });
+
+    String mensajeEsperado = "Dinero Insuficiente";
+    assertEquals(mensajeEsperado, exception.getMessage());
+}
+```
+#### Agrupando múltiples verificaciones con `assertAll`
+Podemos comprobar varias condiciones a la vez sin que el test se detenga ante el primer fallo:
+```java
+@Test
+@DisplayName("Probando relación entre cuentas y banco con assertAll")
+void testRelacionBancoCuentas() {
+    Cuenta cuenta1 = new Cuenta("Jhon Doe", new BigDecimal("2500"));
+    Cuenta cuenta2 = new Cuenta("Andres", new BigDecimal("1500.8989"));
+
+    Banco banco = new Banco();
+    banco.addCuenta(cuenta1);
+    banco.addCuenta(cuenta2);
+    banco.setNombre("Banco del Estado");
+
+    banco.transferir(cuenta2, cuenta1, new BigDecimal(500));
+
+    assertAll(
+        () -> assertEquals("1000.8989", cuenta2.getSaldo().toPlainString(), 
+              () -> "El saldo de cuenta2 no es el esperado."),
+        () -> assertEquals("3000", cuenta1.getSaldo().toPlainString(), 
+              () -> "El saldo de cuenta1 no es el esperado."),
+        () -> assertEquals(2, banco.getCuentas().size(), 
+              () -> "El banco no tiene las cuentas esperadas."),
+        () -> assertEquals("Banco del Estado", cuenta1.getBanco().getNombre()),
+        () -> assertEquals("Andres", banco.getCuentas().stream()
+                  .filter(c -> c.getPersona().equals("Andres"))
+                  .findFirst().get().getPersona()),
+        () -> assertTrue(banco.getCuentas().stream()
+                  .anyMatch(c -> c.getPersona().equals("Jhon Doe")))
+    );
+}
+```
+### Anotaciones adicionales
+Además de las anotaciones principales, JUnit 5 ofrece herramientas que permiten escribir tests más avanzados, organizados y expresivos. Aunque no son imprescindibles en proyectos pequeños, pueden resultar muy útiles en casos específicos o en proyectos más complejos.
+#### `@RepeatedTest`
+Ejecuta un mismo test varias veces. Útil para detectar errores intermitentes o probar comportamiento repetitivo.
+```java
+@DisplayName("Probando débito con repetición")
+@RepeatedTest(value = 5, name = "{displayName} - Repetición {currentRepetition} de {totalRepetitions}")
+void testDebitoCuentaRepetir(RepetitionInfo info) {
+    if (info.getCurrentRepetition() == 3) {
+        System.out.println("Estamos en la repetición " + info.getCurrentRepetition());
+    }
+
+    cuenta.debito(new BigDecimal(100));
+    assertNotNull(cuenta.getSaldo());
+    assertEquals(900, cuenta.getSaldo().intValue());
+    assertEquals("900.12345", cuenta.getSaldo().toPlainString());
+}
+```
+#### `@ParameterizedTest`
+Permite ejecutar una misma prueba con diferentes valores de entrada.
+```java
+@ParameterizedTest(name = "Prueba #{index} con monto {0}")
+@CsvSource({"1,100", "2,200", "3,300", "4,500", "5,700", "6,1000.12345"})
+void testDebitoCuentaCsvSource(String index, String monto) {
+    System.out.println(index + " -> " + monto);
+    cuenta.debito(new BigDecimal(monto));
+    assertNotNull(cuenta.getSaldo());
+    assertTrue(cuenta.getSaldo().compareTo(BigDecimal.ZERO) > 0);
+}
+```
+Se puede usar también con:
+
+- `@CsvSource`
+- `@MethodSource`
+- `@EnumSource`
+- `@ArgumentsSource`
+#### `@Tag`
+Sirve para etiquetar tests. Es útil para organizar o filtrar pruebas por grupos (por ejemplo: lentas, de integración, etc.).
+```java
+@Tag("cuenta")
+@Test
+void testDebitoCuenta() {
+    cuenta.debito(new BigDecimal(100));
+    assertNotNull(cuenta.getSaldo());
+    assertEquals(900, cuenta.getSaldo().intValue());
+    assertEquals("900.12345", cuenta.getSaldo().toPlainString());
+}
+```
+#### `@Nested`
+Permite agrupar pruebas relacionadas dentro de clases internas. Mejora la legibilidad cuando se testean distintos estados o contextos.
+```java
+@Nested
+class CuentaOperacionesTest {
+
+    @Tag("cuenta")
+    @Test
+    void testDebitoCuenta() {
+        cuenta.debito(new BigDecimal(100));
+        assertNotNull(cuenta.getSaldo());
+        assertEquals(900, cuenta.getSaldo().intValue());
+        assertEquals("900.12345", cuenta.getSaldo().toPlainString());
+    }
+
+    @Tag("cuenta")
+    @Test
+    void testCreditoCuenta() {
+        cuenta.credito(new BigDecimal(100));
+        assertNotNull(cuenta.getSaldo());
+        assertEquals(1100, cuenta.getSaldo().intValue());
+        assertEquals("1100.12345", cuenta.getSaldo().toPlainString());
+    }
+
+    @Tag("cuenta")
+    @Tag("banco")
+    @Test
+    void testTransferirDineroCuentas() {
+        Cuenta cuenta1 = new Cuenta("Jhon Doe", new BigDecimal("2500"));
+        Cuenta cuenta2 = new Cuenta("Andres", new BigDecimal("1500.8989"));
+
+        Banco banco = new Banco();
+        banco.setNombre("Banco del Estado");
+        banco.transferir(cuenta2, cuenta1, new BigDecimal(500));
+
+        assertEquals("1000.8989", cuenta2.getSaldo().toPlainString());
+        assertEquals("3000", cuenta1.getSaldo().toPlainString());
+    }
+}
+```
+Estas anotaciones no son imprescindibles en proyectos pequeños, pero pueden marcar la diferencia cuando el código crece o necesitas organizar mejor las pruebas.
+## Mockito
+Cuando una clase depende de otras (servicios, DAOs, repositorios...), es común que **no queramos testear esas dependencias reales**, sino centrarnos solo en la lógica de **la clase que estamos probando**.  
+
+Ahí es donde entra **Mockito**, una librería que permite **simular (mockear)** objetos y controlar su comportamiento en los tests.
+
+Mockito se suele usar junto a JUnit para pruebas unitarias cuando hay dependencias que queremos evitar ejecutar de verdad (como acceso a base de datos o servicios externos).
+```xml
+<dependency>  
+    <groupId>org.junit.jupiter</groupId>  
+    <artifactId>junit-jupiter</artifactId>  
+    <version>5.6.3</version>  
+</dependency>  
+<dependency>  
+    <groupId>org.mockito</groupId>  
+    <artifactId>mockito-core</artifactId>  
+    <version>3.6.28</version>  
+</dependency>  
+<dependency>  
+    <groupId>org.mockito</groupId>  
+    <artifactId>mockito-junit-jupiter</artifactId>  
+    <version>3.6.28</version>  
+</dependency>
+```
+
+Todos los ejemplos de esta sección están basados en un proyecto sencillo que puedes consultar y descargar desde el siguiente enlace:
+
+👉 [Proyecto mockito](https://github.com/jose-016al/Java/tree/master/Proyectos/app-mockito)
+
+El proyecto contiene una clase principal llamada `Examen`, junto con sus respectivos **repositories** y **services**: `ExamenRepository`, `PreguntaRepository`, `ExamenService` y `PreguntaService`.
+
+Nos centraremos en realizar pruebas unitarias sobre la clase **`ExamenService`**, por lo que su clase de prueba se llamará **`ExamenServiceTest`**, siguiendo la convención habitual.
+### Anotaciones principales en Mockito
+
+| Anotación                             | ¿Para qué sirve?                                                    |
+| ------------------------------------- | ------------------------------------------------------------------- |
+| `@Mock`                               | Crea un mock de una clase o interfaz                                |
+| `@InjectMocks`                        | Crea una instancia real e **inyecta** los mocks en sus dependencias |
+| `@ExtendWith(MockitoExtension.class)` | Permite usar Mockito con JUnit 5                                    |
+
+Supongamos que tenemos un `ExamenService` que depende de un `ExamenRepository`.  
+En el ejemplo siguiente podemos ver cómo se utilizan las anotaciones de Mockito para **crear mocks e inyectarlos automáticamente** en la clase a testear:
+```java
+@ExtendWith(MockitoExtension.class)
+class ExamenServiceTest {
+
+    @Mock
+    ExamenRepository repository;
+
+    @Mock
+    PreguntaRepository preguntaRepository;
+
+    @InjectMocks
+    ExamenService service;
+
+    /* También podríamos hacerlo manualmente con un `@BeforeEach`, sin anotaciones: 
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        this.repository = mock(ExamenRepository.class);
+        this.preguntaRepository = mock(PreguntaRepository.class);
+        this.service = new ExamenService(repository, preguntaRepository);
+    }
+    Pero lo más recomendable y limpio es usar las anotaciones.
+    */
+
+    @Test
+    void findExamenPorNombre() {
+        // Aquí iría la lógica del test
+    }
+}
+```
+### Métodos comunes
+Una vez revisadas las anotaciones principales de Mockito, es momento de abordar los métodos que permiten simular comportamientos y verificar interacciones con objetos mockeados.
+
+Es importante recordar que Mockito se integra perfectamente con JUnit, por lo que pueden utilizarse conjuntamente para sacar el máximo provecho en pruebas unitarias.
+#### `when(...).thenReturn(...)`
+El método `when(...)` permite **simular el comportamiento de un mock**, definiendo qué debe ocurrir cuando se invoca un método específico.
+
+En el siguiente ejemplo, se indica que **cuando se invoque `findAll()` sobre el `repository` (que es un mock)**, debe devolverse una lista de objetos (`Datos.EXAMENES`) en lugar de hacer una llamada real a la base de datos. Esto permite verificar el comportamiento de `ExamenService` en un entorno controlado:
+```java
+@Test
+void findExamenPorNombre() {
+    when(repository.findAll()).thenReturn(Datos.EXAMENES);
+
+    Optional<Examen> examen = service.findExamenPorNombre("Matematicas");
+
+    assertTrue(examen.isPresent());
+    assertEquals(5L, examen.orElseThrow().getId());
+    assertEquals("Matematicas", examen.orElseThrow().getNombre());
+}
+```
+##### Variantes de `then...` más comunes
+- `thenReturn(valor)` → Devuelve un valor simulado.
+- `thenThrow(excepcion)` → Lanza una excepción al llamar al método.
+- `thenAnswer(respuesta)` → Ejecuta lógica personalizada usando los argumentos del método.
+- `thenCallRealMethod()` → Ejecuta el método real del objeto (solo en _spies_).
+- `then(...)` → Versión más general para casos avanzados, poco común en la práctica.
+##### `then(...)` con lógica personalizada
+Aunque no es tan común como `thenReturn(...)` o `thenThrow(...)`, el método `then(...)` permite definir una **respuesta completamente personalizada** mediante una implementación de la interfaz `Answer<T>`.  
+
+Esto es especialmente útil cuando se quiere modificar o enriquecer el objeto simulado antes de devolverlo, como por ejemplo, **simular la generación de un ID autoincremental** al guardar un objeto.
+```java
+@Test
+void testGuardarExamen() {
+    // Given
+    Examen newExamen = Datos.EXAMEN;
+    newExamen.setPreguntas(Datos.PREGUNTAS);
+
+    when(repository.guardar(any(Examen.class))).then(new Answer<Examen>() {
+
+        Long secuencia = 8L;
+
+        @Override
+        public Examen answer(InvocationOnMock invocation) {
+            Examen examen = invocation.getArgument(0);
+            examen.setId(secuencia++);
+            return examen;
+        }
+    });
+
+    // When
+    Examen examen = service.guardar(newExamen);
+
+    // Then
+    assertNotNull(examen.getId());
+    assertEquals(8L, examen.getId());
+    assertEquals("Fisica", examen.getNombre());
+
+    verify(repository).guardar(any(Examen.class));
+    verify(preguntaRepository).guardarVarias(anyList());
+}
+```
+- Simula que al guardar un `Examen`, se le asigna automáticamente un ID (`8L`), como lo haría una base de datos real.
+- Se aprovecha `InvocationOnMock` para **acceder al argumento recibido** y modificarlo antes de retornarlo.
+- Esta técnica es útil cuando se necesita validar la lógica de guardado con efectos secundarios simulados.
+##### `thenThrow(...)` para simular excepciones
+La variante `thenThrow(...)` se utiliza para simular que un método del mock **lanza una excepción** al ser invocado.  
+
+Esto es especialmente útil para probar el comportamiento del sistema cuando ocurre un error (por ejemplo, un `null`, un fallo en la lógica o una excepción controlada).
+```java
+@Test
+void testManejoException() {
+    when(repository.findAll()).thenReturn(Datos.EXAMENES_ID_NULL);
+    when(preguntaRepository.findPreguntasPorExamenId(isNull()))
+        .thenThrow(IllegalArgumentException.class);
+
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        service.findExamenPorNombre("Matematicas");
+    });
+
+    assertEquals(IllegalArgumentException.class, exception.getClass());
+
+    verify(repository).findAll();
+    verify(preguntaRepository).findPreguntasPorExamenId(isNull());
+}
+```
+#### `verify(mock).metodo()`
+Este método permite **verificar que un mock haya ejecutado un método determinado** durante la prueba. Es útil para confirmar que ciertas acciones se realizaron o que **no se realizaron**, según lo esperado.
+
+Por defecto, `verify(mock).metodo()` verifica que el método fue llamado **exactamente una vez**.  
+También se puede controlar la cantidad de invocaciones con métodos adicionales como:
+
+- `times(n)`: el método fue llamado _n_ veces.
+- `never()`: el método **no fue llamado nunca**.
+- `atLeast(n)`: el método fue llamado _al menos_ _n_ veces.
+- `atMost(n)`: el método fue llamado _como máximo_ _n_ veces.
+```java
+@Test
+void findExamenPorNombre() {
+    when(repository.findAll()).thenReturn(Datos.EXAMENES);
+
+    Optional<Examen> examen = service.findExamenPorNombre("Matematicas");
+
+    assertTrue(examen.isPresent());
+    assertEquals(5L, examen.orElseThrow().getId());
+    assertEquals("Matematicas", examen.orElseThrow().getNombre());
+
+    verify(repository).findAll();                 // llamada esperada
+    verify(repository, times(1)).findAll();       // equivalente explícito
+    verify(repository, never()).findById(anyLong()); // no se esperaba esta llamada
+}
+```
+#### `any()`, `anyLong()`, etc
+Mockito ofrece los llamados _argument matchers_, que permiten **evitar el uso de valores concretos** al simular llamadas a métodos.  
+
+Esto resulta útil cuando no importa el valor exacto del parámetro, solo que se haya invocado con **algún valor del tipo esperado**.
+
+Entre los matchers más comunes se encuentran:
+
+- `any(Class.class)`
+- `anyLong()`
+- `anyString()`
+- `anyInt()`
+
+En el siguiente ejemplo, se simula el comportamiento del repositorio de preguntas sin importar qué ID de examen se haya recibido:
+```java
+@Test
+void testPreguntasExamen() {
+    when(repository.findAll()).thenReturn(Datos.EXAMENES);
+    when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(Datos.PREGUNTAS);
+
+    Examen examen = service.findExamenPorNombreConPreguntas("Matematicas");
+
+    assertEquals(5, examen.getPreguntas().size());
+    assertTrue(examen.getPreguntas().contains("geometria"));
+}
+```
+
+#### `doThrow(...).when(...)`
+Este método permite **simular que un mock lanza una excepción** al ejecutarse. Es especialmente útil cuando se desea comprobar el comportamiento del sistema frente a errores controlados o situaciones excepcionales.
+
+A diferencia de `when(...).thenThrow(...)`, este método se utiliza con métodos `void`, que no devuelven valores.
+```java
+@Test
+void testDoThrow() {
+    Examen examen = Datos.EXAMEN;
+    examen.setPreguntas(Datos.PREGUNTAS);
+
+    doThrow(IllegalArgumentException.class)
+        .when(preguntaRepository)
+        .guardarVarias(anyList());
+
+    assertThrows(IllegalArgumentException.class, () -> {
+        service.guardar(examen);
+    });
+}
+```
+#### `doAnswer(...)`
+Este método permite **personalizar la lógica que se ejecuta cuando se llama a un método del mock**. Es útil cuando se necesita simular un comportamiento más complejo que un simple retorno fijo o una excepción.
+```java
+@Test
+void testDoAnswer() {
+    Examen examen = Datos.EXAMEN;
+    examen.setPreguntas(Datos.PREGUNTAS);
+
+    doAnswer(invocation -> {
+        List<String> preguntas = invocation.getArgument(0);
+        assertEquals(5, preguntas.size());
+        assertTrue(preguntas.contains("geometria"));
+        return null; // obligatorio si el método es void
+    }).when(preguntaRepository).guardarVarias(anyList());
+
+    service.guardar(examen);
+
+    verify(preguntaRepository).guardarVarias(Datos.PREGUNTAS);
+}
+```
+Este test simula que `guardarVarias()` recibe correctamente la lista de preguntas y permite verificar el contenido durante la ejecución sin necesidad de un comportamiento real.
+### Casos avanzados
+#### `ArgumentCaptor` — Verificar argumentos capturados
+`ArgumentCaptor` permite **capturar y examinar los valores reales** que se le pasaron a un método del mock durante la ejecución.  
+
+Es especialmente útil cuando se desea validar un argumento que no se puede anticipar fácilmente, o cuando se usa un _matcher_ genérico como `any()` pero se necesita comprobar el valor exacto.
+```java
+@Captor
+ArgumentCaptor<Long> captor;
+
+@Test
+void testArgumentCaptor() {
+    when(repository.findAll()).thenReturn(Datos.EXAMENES);
+    service.findExamenPorNombreConPreguntas("Matematicas");
+    verify(preguntaRepository).findPreguntasPorExamenId(captor.capture());
+    assertEquals(5L, captor.getValue());
+}
+```
+
+- Simula la llamada a `findAll()` para devolver una lista de exámenes.
+- Llama al servicio, que internamente debería buscar preguntas por el ID del examen.
+- Captura el valor exacto con el que se llamó a `findPreguntasPorExamenId(...)`.
+- Verifica que ese valor fue efectivamente `5L`.
+#### `argThat(...)` y `ArgumentMatcher` — Matchers personalizados
+Mockito permite usar matchers personalizados mediante `argThat(...)` y la interfaz `ArgumentMatcher<T>`.  
+
+Esto resulta útil cuando se desea verificar que un argumento cumple una **condición específica**, más allá de un simple tipo o valor.
+##### Ejemplo con `argThat(...)` usando expresión lambda:
+```java
+@Test
+void testArgumentMatchers3() {
+    when(repository.findAll()).thenReturn(Datos.EXAMENES_ID_NEGATIVOS);
+    when(preguntaRepository.findPreguntasPorExamenId(anyLong())).thenReturn(Datos.PREGUNTAS);
+
+    service.findExamenPorNombreConPreguntas("Matematicas");
+
+    verify(repository).findAll();
+    verify(preguntaRepository).findPreguntasPorExamenId(
+        argThat(argument -> argument != null && argument > 0)
+    );
+}
+```
+
+##### #### Ejemplo completo con `ArgumentMatcher` personalizado
+A continuación se muestra cómo aplicar un `ArgumentMatcher` definido por una clase personalizada para validar que el argumento recibido cumple con una condición específica (en este caso, que el ID del examen sea positivo):
+```java
+@Test
+void testArgumentMatchers2() {
+    when(repository.findAll()).thenReturn(Datos.EXAMENES_ID_NEGATIVOS);
+    when(preguntaRepository.findPreguntasPorExamenId(anyLong()))
+        .thenReturn(Datos.PREGUNTAS);
+
+    service.findExamenPorNombreConPreguntas("Matematicas");
+
+    verify(repository).findAll();
+    verify(preguntaRepository)
+        .findPreguntasPorExamenId(argThat(new MiArgsMatchers()));
+}
+```
+Y la clase `ArgumentMatcher` personalizada usada en este test:
+```java
+public static class MiArgsMatchers implements ArgumentMatcher<Long> {
+
+    private Long argument;
+
+    @Override
+    public boolean matches(Long argument) {
+        this.argument = argument;
+        return argument != null && argument > 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Debe ser un entero positivo, pero se recibió: " + argument;
     }
 }
 ```
