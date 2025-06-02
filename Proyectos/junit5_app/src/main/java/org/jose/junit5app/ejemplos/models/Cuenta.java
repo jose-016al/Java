@@ -1,6 +1,6 @@
-package org.aguzman.junit5app.ejemplos.models;
+package org.jose.junit5app.ejemplos.models;
 
-import org.aguzman.junit5app.ejemplos.exceptions.DineroInsuficienteException;
+import org.jose.junit5app.ejemplos.exceptions.DineroInsuficienteException;
 
 import java.math.BigDecimal;
 

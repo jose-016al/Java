@@ -1,4 +1,4 @@
-package org.aguzman.junit5app.ejemplos.exceptions;
+package org.jose.junit5app.ejemplos.exceptions;
 
 public class DineroInsuficienteException extends RuntimeException{
     public DineroInsuficienteException(String message) {

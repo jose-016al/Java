@@ -1,4 +1,4 @@
-package org.aguzman.junit5app.ejemplos.models;
+package org.jose.junit5app.ejemplos.models;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
